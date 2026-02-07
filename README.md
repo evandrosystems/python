@@ -18,3 +18,7 @@ cp .env.example .env
 ```
 docker compose run --rm python bash
 ```
+
+```
+pip install -r requirements.txt -r requirements-dev.txt
+```
