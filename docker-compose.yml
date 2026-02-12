@@ -1,9 +1,8 @@
 services:
-
   python:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./.docker/python/Dockerfile
     working_dir: /app
     volumes:
       - .:/app
@@ -13,4 +12,33 @@ services:
       - "${PORT_CONTAINER}:8000"
     container_name: python
     image: python
-    # command: tail -f /dev/null
+    command: tail -f /dev/null
+
+  mysql:
+    build:
+      context: .
+      dockerfile: ./.docker/mysql/Dockerfile
+    image: python_mysql
+    container_name: python_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - python_mysql:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - django
+    depends_on:
+      - python
+    ports:
+      - "3306:3306"
+
+networks:
+  django:
+    driver: bridge
+
+volumes:
+    python_mysql:
+      name: 'python_mysql'
